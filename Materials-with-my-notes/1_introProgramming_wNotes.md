@@ -124,6 +124,8 @@ Developers rely on editors for a few additional reasons:
   - [teletype](https://atom.io/packages/teletype)
   - [atom-beautify](https://atom.io/packages/atom-beautify)
 
+> _Me: The Live Share looks really neat and easy to set up a share (via unique URL). Look at the extension docs to see how I can test this by myself._
+
 ### Browsers
 
 Another crucial tool is the browser. Web developers rely on the browser to see how their code runs on the web. It's also used to display the visual elements of a web page that are written in the editor, like HTML.

@@ -122,6 +122,8 @@ Let's say you have a folder locally with some code project and you want to start
 
    This command helps us to unstage only a particular file at once that we don't want to include for the next commit.
 
+> ME: Good to remember that `reset` is the opposite of `add`
+
 1. **Persisting your work**. At this point you've added the files to a so called _staging area_. A place where Git is tracking your files. To make the change permanent you need to _commit_ the files. To do so you create a _commit_ with the `git commit` command. A _commit_ represents a saving point in the history of your repo. Type the following to create a _commit_:
 
    ```bash
@@ -291,6 +293,8 @@ To work on the project, switch to the right folder:
 `cd ProjectURL`
 
 You can also open the entire project using [Codespaces](https://github.com/features/codespaces), GitHub's embedded code editor / cloud development environment, or [GitHub Desktop](https://desktop.github.com/).
+
+> ME: The [Codespaces](https://github.com/features/codespaces) look powerful. For teams only right now, but rolling out to personal accounts soon.
 
 Lastly, you can download the code in a zipped folder.
 
