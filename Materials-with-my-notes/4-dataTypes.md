@@ -97,16 +97,18 @@ Constants are similar to variables, with two exceptions:
     obj = { b: 5 }; // not allowed
     ```
 
-  - **Object value is not protected**. The following IS allowed:
+> ME: This is good to know that the object reference _is_ protected.
 
-    ```javascript
-    const obj = { a: 3 };
-    obj.a = 5; // allowed
-    ```
+- **Object value is not protected**. The following IS allowed:
 
-    Above you are changing the value of the object but not the reference itself, which makes it allowed.
+  ```javascript
+  const obj = { a: 3 };
+  obj.a = 5; // allowed
+  ```
 
-  > Note, a `const` means the reference is protected from reassignment. The value is not _immutable_ though and can change, especially if it's a complex construct like an object.
+  Above you are changing the value of the object but not the reference itself, which makes it allowed.
+
+> Note, a `const` means the reference is protected from reassignment. The value is not _immutable_ though and can change, especially if it's a complex construct like an object.
 
 ## Data Types
 
