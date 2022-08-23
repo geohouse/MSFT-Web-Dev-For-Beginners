@@ -39,7 +39,7 @@ document.querySelector("#start").addEventListener("click", () => {
   console.log("span words is");
   console.log(spanWords);
   // convert into string and set as innerHTML for quote display
-  quoteElement.innerHTML = spanWords.join("");
+  quoteElement.innerHTML = words.join(" "); //spanWords.join("");
   // Highlight the first word
   quoteElement.childNodes[0].className = "highlight";
   // clear any other messages
