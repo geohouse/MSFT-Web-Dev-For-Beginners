@@ -1,3 +1,21 @@
+// This is the centralized storage location for registering
+// what actions should be taken in response to different user interactions,
+// and therefore is the key part of the pub/sub model.
+
+// The 'on' method registers callback functions 'listeners' (stored as functions
+// in an array) for each type of user interaction (interaction type is the key for
+// the lookup object, and the array of actions to be taken upon that interaction is the
+// value for the key in that lookup object).
+
+// The 'emit' method is what gets called when the specified types of user interactions
+// have happened. All that's known before the emit call is that the interaction has
+// taken place (through eventHandler and checking for specific interaction type),
+// but NOT what other related actions may be needed based on that interaction type.
+// The emit method looks up the array of associated callback functions (actions)
+// that have been registered for that specific type of user interaction, and it calls
+// each of them to make those actions happen. It optionally can take a payload that is
+// directly passed to the callback function for each of the events that needs to be done
+// upon that type of user interaction.
 class EventEmitter {
   constructor() {
     this.listeners = {};
