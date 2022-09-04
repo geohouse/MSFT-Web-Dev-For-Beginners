@@ -76,20 +76,31 @@ class Hero extends GameObject {
     this.type = "Hero";
     this.speed = { x: 0, y: 0 };
     this.cooldown = 0;
+    this.life = 3;
+    this.points = 0;
   }
   fire() {
     gameObjects.push(new Laser(this.x + 45, this.y - 10));
-    this.cooldown = 500;
+    this.cooldown = 300;
     let id = setInterval(() => {
       if (this.cooldown > 0) {
         this.cooldown -= 100;
       } else {
         clearInterval(id);
       }
-    }, 200);
+    }, 100);
   }
   canFire() {
     return this.cooldown === 0;
+  }
+  decrementLife() {
+    this.life--;
+    if (this.life === 0) {
+      this.dead = true;
+    }
+  }
+  incrementPoints() {
+    this.points += 100;
   }
 }
 
@@ -134,6 +145,7 @@ function updateGameObjects() {
   // the laser hit something
   lasers.forEach((laser) => {
     enemies.forEach((enemy) => {
+      const heroRect = hero.rectFromGameObject();
       if (
         intersectRect(laser.rectFromGameObject(), enemy.rectFromGameObject())
       ) {
@@ -141,6 +153,9 @@ function updateGameObjects() {
           first: laser,
           second: enemy,
         });
+      }
+      if (intersectRect(heroRect, enemy.rectFromGameObject())) {
+        eventEmitter.emit(Messages.collisionEnemyHero, { enemy });
       }
     });
   });
@@ -171,10 +186,13 @@ const Messages = {
 let heroImg,
   enemyImg,
   laserImg,
+  lifeImg,
   canvas,
   ctx,
   gameObjects = [],
   hero,
+  totalScore = 0,
+  livesRemaining = 3,
   eventEmitter = new EventEmitter();
 
 let onKeyDown = function (event) {
@@ -236,25 +254,43 @@ function drawGameObjects(ctx) {
   gameObjects.forEach((go) => go.draw(ctx));
 }
 
+function drawLife() {
+  const startPos = canvas.width - 180;
+  for (let index = 0; index < hero.life; index++) {
+    ctx.drawImage(lifeImg, startPos + 45 * (index + 1), canvas.height - 37);
+  }
+}
+
+function drawPoints() {
+  ctx.font = "30px Arial";
+  ctx.fillStyle = "red";
+  ctx.textAlign = "left";
+  drawText(`Points: ${hero.points}`, 10, canvas.height - 20);
+}
+
+function drawText(message, x, y) {
+  ctx.fillText(message, x, y);
+}
+
 function initGame() {
   gameObjects = [];
   createEnemies();
   createHero();
 
   eventEmitter.on(Messages.keyEventUp, () => {
-    hero.y -= 5;
+    hero.y -= 15;
   });
 
   eventEmitter.on(Messages.keyEventDown, () => {
-    hero.y += 5;
+    hero.y += 15;
   });
 
   eventEmitter.on(Messages.keyEventLeft, () => {
-    hero.x -= 5;
+    hero.x -= 15;
   });
 
   eventEmitter.on(Messages.keyEventRight, () => {
-    hero.x += 5;
+    hero.x += 15;
   });
 
   eventEmitter.on(Messages.keyEventSpace, () => {
@@ -266,6 +302,12 @@ function initGame() {
   eventEmitter.on(Messages.collisionEnemyLaser, (_, { first, second }) => {
     first.dead = true;
     second.dead = true;
+    hero.incrementPoints();
+  });
+
+  eventEmitter.on(Messages.collisionEnemyHero, (_, { enemy }) => {
+    enemy.dead = true;
+    hero.decrementLife();
   });
 }
 
@@ -275,6 +317,7 @@ window.onload = async () => {
   heroImg = await loadTexture("assets/player.png");
   enemyImg = await loadTexture("assets/enemyShip.png");
   laserImg = await loadTexture("assets/laserRed.png");
+  lifeImg = await loadTexture("assets/life.png");
 
   initGame();
   let gameLoopId = setInterval(() => {
@@ -283,5 +326,7 @@ window.onload = async () => {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     drawGameObjects(ctx);
     updateGameObjects();
+    drawPoints();
+    drawLife();
   }, 100);
 };
